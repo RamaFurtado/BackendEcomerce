@@ -1,7 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Entities.Shoe;
-import com.example.demo.services.ShoeServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

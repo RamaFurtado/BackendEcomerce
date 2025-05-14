@@ -1,23 +1,11 @@
-package com.example.demo.models.Entities;
+package com.example.demo.models.Dto;
 
 import com.example.demo.models.Enums.ProductCategory;
 import com.example.demo.models.Enums.ProductGender;
 import com.example.demo.models.Enums.ProductSize;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import jakarta.validation.constraints.*;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductUpdateDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     private String name;
@@ -28,17 +16,12 @@ public class Product {
     @Positive(message = "El precio debe ser mayor a 0")
     private double price;
 
-    @NotBlank(message = "La URL de la imagen es obligatoria")
-    @Column(name = "image_url")
     private String imageUrl;
 
-    @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
-    @Enumerated(EnumType.STRING)
     private ProductGender genero;
 
-    @Enumerated(EnumType.STRING)
     private ProductSize talle;
 
     @Positive(message = "El stock debe ser mayor a 0")
@@ -46,4 +29,7 @@ public class Product {
 
     @NotBlank(message = "El modelo es obligatorio")
     private String modelo;
+
+    // Getters and Setters
+    // (Similares a los de ProductCreateDTO)
 }
