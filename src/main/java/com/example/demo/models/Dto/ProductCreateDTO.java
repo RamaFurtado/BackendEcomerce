@@ -5,6 +5,8 @@ import com.example.demo.models.Enums.ProductGender;
 import com.example.demo.models.Enums.ProductSize;
 import jakarta.validation.constraints.*;
 
+
+
 public class ProductCreateDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -94,7 +96,6 @@ public class ProductCreateDTO {
     public int getStock() {
         return stock;
     }
-
     public void setStock(int stock) {
         this.stock = stock;
     }
