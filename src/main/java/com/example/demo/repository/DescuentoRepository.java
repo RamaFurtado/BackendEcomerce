@@ -17,13 +17,11 @@ public interface DescuentoRepository extends JpaRepository<Descuento, Long> {
 
     List<Descuento> findByFechaFinalBetween(Date fechaInicio, Date fechaFin);
 
-    /**
-     * Busca descuentos activos en una fecha específica
-     */
+    //Busca descuentos activos en una fecha específica
+
     List<Descuento> findByFechaInicioBeforeAndFechaFinalAfter(Date fecha, Date mismaFecha);
 
-    /**
-     * Busca por porcentaje de descuento
-     */
+    //Busca por porcentaje de descuento
+
     List<Descuento> findByPorcentaje(Double porcentaje);
 }

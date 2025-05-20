@@ -15,25 +15,21 @@ public interface PrecioDescuentoRepository extends JpaRepository<PrecioDescuento
 
     List<PrecioDescuento> findByPrecioId(Long precioId);
 
-    /**
-     * Busca relaciones precio-descuento con descuentos activos en la fecha dada
-     */
+    //Busca relaciones precio-descuento con descuentos activos en la fecha dada
+
     @Query("SELECT pd FROM PrecioDescuento pd JOIN pd.descuento d WHERE d.fechaInicio <= :fecha AND d.fechaFinal >= :fecha")
     List<PrecioDescuento> findActiveDiscountsAtDate(Date fecha);
 
-    /**
-     * Elimina relaciones por descuento ID
-     */
+    //Elimina relaciones por descuento ID
+
     void deleteByDescuentoId(Long descuentoId);
 
-    /**
-     * Elimina relaciones por precio ID
-     */
+    //Elimina relaciones por precio ID
+
     void deleteByPrecioId(Long precioId);
 
-    /**
-     * Verifica si existe una relación entre un precio y un descuento
-     */
+    //Verifica si existe una relación entre un precio y un descuento
+
     boolean existsByPrecioIdAndDescuentoId(Long precioId, Long descuentoId);
 
 

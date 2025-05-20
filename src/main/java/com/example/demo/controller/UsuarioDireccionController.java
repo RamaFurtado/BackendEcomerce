@@ -24,12 +24,12 @@ public class UsuarioDireccionController {
     @PostMapping
     public ResponseEntity<UsuarioDireccion> vincular(@RequestBody UsuarioDireccionDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usuarioDireccionService.crearRelacion(dto)); // nombre correcto
+                .body(usuarioDireccionService.crearRelacion(dto));
     }
 
     @DeleteMapping
     public ResponseEntity<Void> eliminarVinculo(@RequestParam Long usuarioId, @RequestParam Long direccionId) {
-        usuarioDireccionService.eliminarRelacion(usuarioId, direccionId); // nombre correcto
+        usuarioDireccionService.eliminarRelacion(usuarioId, direccionId);
         return ResponseEntity.noContent().build();
     }
 }

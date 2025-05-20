@@ -5,13 +5,15 @@ import com.example.demo.enums.Sexo;
 import com.example.demo.enums.TipoProducto;
 import com.example.demo.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSpecificationExecutor<Producto> {
+
 
     List<Producto> findByNombre(String nombre);
 
@@ -25,4 +27,5 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByCategoriaAndTipoProducto(Categoria categoria, TipoProducto tipoProducto);
 
     boolean existsByNombre(String nombre);
+
 }

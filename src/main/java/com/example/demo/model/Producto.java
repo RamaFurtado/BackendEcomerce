@@ -26,8 +26,6 @@ public class Producto {
     private Categoria categoria;
 
 
-
-
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<Detalle> detalles;
 

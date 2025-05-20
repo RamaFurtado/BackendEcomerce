@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.ProductoRequestDTO;
+import com.example.demo.enums.Sexo;
+import com.example.demo.enums.TipoProducto;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
@@ -8,12 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
 public class ProductoService {
     private final ProductoRepository productoRepository;
-    private final TalleRepository talleRepository;
+    private final TallesRepository tallesRepository;
     private final PrecioRepository precioRepository;
     private final DetalleRepository detalleRepository;
     private final ImagenRepository imagenRepository;
@@ -45,7 +48,7 @@ public class ProductoService {
         detalle.setStock(dto.getStock());
         detalle.setProducto(producto);
         detalle.setPrecio(precio);
-        detalle.setTalle(talleRepository.findById(dto.getTalleId())
+        detalle.setTalle(tallesRepository.findById(dto.getTalleId())
                 .orElseThrow(() -> new RuntimeException("Talle no encontrado")));
 
         detalle = detalleRepository.save(detalle);
@@ -81,4 +84,5 @@ public class ProductoService {
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
         productoRepository.delete(producto);
     }
+
 }

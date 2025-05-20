@@ -23,7 +23,7 @@ public class ProductoRequestDTO {
     private TipoProducto tipoProducto;
 
     @NotNull(message = "La categoría no debe ser nula")
-    private Categoria categoria;  // Aquí usas el enum directamente
+    private Categoria categoria;
 
     @NotNull(message = "El talleId no debe ser nulo")
     private Long talleId;

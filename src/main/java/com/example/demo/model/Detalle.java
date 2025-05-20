@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Detalle {
 
     @ManyToOne
     @JoinColumn(name = "producto_id")
+    @JsonIgnore
     private Producto producto;
 
     @ManyToOne
@@ -29,7 +31,7 @@ public class Detalle {
 
     @ManyToOne
     @JoinColumn(name = "talle_id")
-    private Talle talle;
+    private Talles talle;
 
     @OneToMany(mappedBy = "detalle", cascade = CascadeType.ALL)
     private List<DetalleImagen> imagenes;

@@ -21,15 +21,13 @@ public interface PrecioRepository extends JpaRepository<Precio, Long> {
 
     List<Precio> findByPrecioVentaBetween(Double minPrecio, Double maxPrecio);
 
-    /**
-     * Calcula el margen de ganancia (precio venta - precio compra)
-     */
+    //Calcula el margen de ganancia (precio venta - precio compra)
     @Query("SELECT p FROM Precio p WHERE (p.precioVenta - p.precioCompra) >= :margenMinimo")
     List<Precio> findByMargenGananciaMinimo(Double margenMinimo);
 
-    /**
-     * Busca precios con descuentos activos
-     */
+
+     //Busca precios con descuentos activos
+
     @Query("SELECT DISTINCT p FROM Precio p JOIN p.preciosDescuento pd JOIN pd.descuento d WHERE d.fechaInicio <= CURRENT_DATE AND d.fechaFinal >= CURRENT_DATE")
     List<Precio> findWithActiveDiscounts();
 }

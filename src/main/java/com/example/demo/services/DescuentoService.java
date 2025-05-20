@@ -19,9 +19,6 @@ public class DescuentoService {
         return descuentoRepository.findByFechaInicioBeforeAndFechaFinalAfter(hoy, hoy);
     }
 
-    public List<Descuento> obtenerEntreFechas(Date inicio, Date fin) {
-        return descuentoRepository.findByFechaInicioBetween(inicio, fin);
-    }
 
     public Descuento crear(Descuento descuento) {
         return descuentoRepository.save(descuento);

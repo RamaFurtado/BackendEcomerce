@@ -42,7 +42,5 @@ public class PrecioDescuentoService {
         repository.deleteByPrecioId(id);
     }
 
-    public void eliminarPorDescuento(Long id) {
-        repository.deleteByDescuentoId(id);
-    }
+
 }

@@ -21,7 +21,7 @@ public class DetalleImagenService {
     private final ImagenRepository imagenRepository;
 
     public DetalleImagen crear(DetalleImagen detalleImagen) {
-        // Validar existencia de detalle e imagen antes de guardar
+        // Valida la  existencia de detalle e imagen antes de guardar
         if (!detalleRepository.existsById(detalleImagen.getDetalle().getId())) {
             throw new RuntimeException("Detalle no encontrado");
         }

@@ -20,7 +20,7 @@ public class PrecioDescuentoController {
 
     @GetMapping("/activos")
     public List<PrecioDescuento> obtenerActivos(@RequestParam Date fecha) {
-        return precioDescuentoService.obtenerDescuentosActivos(fecha); // nombre correcto
+        return precioDescuentoService.obtenerDescuentosActivos(fecha);
     }
 
     @PostMapping

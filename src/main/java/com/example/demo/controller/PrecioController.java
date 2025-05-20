@@ -19,11 +19,11 @@ public class PrecioController {
 
     @GetMapping("/margen")
     public List<Precio> obtenerPorMargenMinimo(@RequestParam Double margen) {
-        return precioService.buscarPorMargenMinimo(margen); // cambiado
+        return precioService.buscarPorMargenMinimo(margen);
     }
 
     @GetMapping("/con-descuento")
     public List<Precio> obtenerConDescuento() {
-        return precioService.buscarConDescuentosActivos(); // cambiado
+        return precioService.buscarConDescuentosActivos();
     }
 }

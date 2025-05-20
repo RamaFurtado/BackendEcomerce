@@ -23,21 +23,21 @@ public class OrdenCompraController {
 
     @GetMapping("/rango-fechas")
     public List<OrdenCompra> obtenerPorRangoFechas(@RequestParam LocalDate inicio, @RequestParam LocalDate fin) {
-        return ordenCompraService.obtenerPorRangoFecha(inicio, fin); // nombre correcto
+        return ordenCompraService.obtenerPorRangoFecha(inicio, fin);
     }
 
     @GetMapping("/total")
     public List<OrdenCompra> obtenerPorTotal(@RequestParam Float min, @RequestParam Float max) {
-        return ordenCompraService.obtenerPorRangoTotal(min, max); // nombre correcto
+        return ordenCompraService.obtenerPorRangoTotal(min, max);
     }
 
     @GetMapping("/sum-total/{usuarioId}")
     public Float obtenerSumaTotal(@PathVariable Long usuarioId) {
-        return ordenCompraService.totalGastadoPorUsuario(usuarioId); // nombre correcto
+        return ordenCompraService.totalGastadoPorUsuario(usuarioId);
     }
 
     @GetMapping("/count/{usuarioId}")
     public Long contarOrdenes(@PathVariable Long usuarioId) {
-        return ordenCompraService.cantidadComprasPorUsuario(usuarioId); // nombre correcto
+        return ordenCompraService.cantidadComprasPorUsuario(usuarioId);
     }
 }
