@@ -1,0 +1,35 @@
+package com.example.demo.controller;
+import com.example.demo.dto.UsuarioDireccionDTO;
+import com.example.demo.model.UsuarioDireccion;
+import com.example.demo.services.UsuarioDireccionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/usuarios-direcciones")
+@RequiredArgsConstructor
+public class UsuarioDireccionController {
+
+    private final UsuarioDireccionService usuarioDireccionService;
+
+    @GetMapping("/usuario/{usuarioId}")
+    public List<UsuarioDireccion> obtenerPorUsuario(@PathVariable Long usuarioId) {
+        return usuarioDireccionService.obtenerPorUsuario(usuarioId);
+    }
+
+    @PostMapping
+    public ResponseEntity<UsuarioDireccion> vincular(@RequestBody UsuarioDireccionDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(usuarioDireccionService.crearRelacion(dto)); // nombre correcto
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> eliminarVinculo(@RequestParam Long usuarioId, @RequestParam Long direccionId) {
+        usuarioDireccionService.eliminarRelacion(usuarioId, direccionId); // nombre correcto
+        return ResponseEntity.noContent().build();
+    }
+}
