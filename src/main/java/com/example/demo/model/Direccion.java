@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class Direccion {
     private int usuarioId;
 
     @OneToMany(mappedBy = "direccion")
+    @JsonManagedReference(value = "direccion-ud")
     private List<UsuarioDireccion> usuarios;
 }
