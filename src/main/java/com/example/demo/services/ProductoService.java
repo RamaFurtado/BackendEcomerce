@@ -48,8 +48,15 @@ public class ProductoService {
         detalle.setStock(dto.getStock());
         detalle.setProducto(producto);
         detalle.setPrecio(precio);
-        detalle.setTalle(tallesRepository.findById(dto.getTalleId())
-                .orElseThrow(() -> new RuntimeException("Talle no encontrado")));
+
+
+        // Buscar talle por nombre o crearlo
+        Talles talle = tallesRepository.findByTalle(dto.getTalle())
+                .orElseGet(() -> {
+                    Talles nuevoTalle = new Talles();
+                    nuevoTalle.setTalle(dto.getTalle());
+                    return tallesRepository.save(nuevoTalle);
+                });
 
         detalle = detalleRepository.save(detalle);
 

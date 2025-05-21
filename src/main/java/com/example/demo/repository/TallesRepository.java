@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface TallesRepository extends JpaRepository<Talles, Long> {
 
-    Optional<Talles> findByNumero(String numero);
+    Optional<Talles> findByTalle(String talle);
 
 
 }

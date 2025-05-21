@@ -16,8 +16,8 @@ public class TallesService {
         this.tallesRepository = tallesRepository;
     }
 
-    public Optional<Talles> buscarPorNumero(String numero) {
-        return tallesRepository.findByNumero(numero);
+    public Optional<Talles> buscarPorTalle(String talle) {
+        return tallesRepository.findByTalle(talle);
     }
 
 

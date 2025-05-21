@@ -25,8 +25,8 @@ public class ProductoRequestDTO {
     @NotNull(message = "La categoría no debe ser nula")
     private Categoria categoria;
 
-    @NotNull(message = "El talleId no debe ser nulo")
-    private Long talleId;
+    @NotNull(message = "El talle no debe ser nulo")
+    private String talle;
 
     @NotBlank(message = "El color no debe estar vacío")
     private String color;

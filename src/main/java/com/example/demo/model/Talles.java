@@ -13,5 +13,5 @@ public class Talles {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String numero;
+    private String talle;
 }
