@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Precio {
 
 
     @OneToMany(mappedBy = "precio")
+    @JsonIgnore
     private List<Detalle> detalles;
     @OneToMany(mappedBy = "precio")
     private Set<PrecioDescuento> preciosDescuento;

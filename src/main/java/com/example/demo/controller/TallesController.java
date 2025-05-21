@@ -27,6 +27,8 @@ public class TallesController {
         return ResponseEntity.ok(tallesService.obtenerPorId(id));
     }
 
+
+
     @PostMapping
     public ResponseEntity<Talles> crear(@RequestBody @Valid Talles talle) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tallesService.crear(talle));

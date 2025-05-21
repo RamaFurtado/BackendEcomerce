@@ -38,7 +38,17 @@ public class ProductoController {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Producto>> filtrarProductos(
+            @RequestParam(required = false) String talle,
+            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) Double precioMin,
+            @RequestParam(required = false) Double precioMax,
+            @RequestParam(required = false) String sexo,
+            @RequestParam(required = false) String tipoProducto
+    ) {
+        return ResponseEntity.ok(productoService.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto));
+    }
 
 
 }

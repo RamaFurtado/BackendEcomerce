@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Imagen {
     private String url;
 
     @OneToMany(mappedBy = "imagen")
+    @JsonIgnore
     private List<DetalleImagen> detalles;
 }
 

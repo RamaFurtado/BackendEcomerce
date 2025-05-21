@@ -79,6 +79,10 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
+    public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
+                                           Double precioMax, String sexo, String tipoProducto) {
+        return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
+    }
 
     public Producto obtenerPorId(Long id) {
         return productoRepository.findById(id)
