@@ -7,7 +7,9 @@ import com.example.demo.model.PrecioDescuento;
 import com.example.demo.repository.DescuentoRepository;
 import com.example.demo.repository.PrecioDescuentoRepository;
 import com.example.demo.repository.PrecioRepository;
+import com.example.demo.services.generics.GenericServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,13 +17,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PrecioDescuentoService {
-    private final PrecioDescuentoRepository repository;
+public class PrecioDescuentoService extends GenericServiceImpl<PrecioDescuento, Long> {
+
     private final PrecioRepository precioRepository;
     private final DescuentoRepository descuentoRepository;
 
+    @Autowired
+    public PrecioDescuentoService(PrecioDescuentoRepository repository,
+                                  PrecioRepository precioRepository,
+                                  DescuentoRepository descuentoRepository) {
+        super(repository);
+        this.precioRepository = precioRepository;
+        this.descuentoRepository = descuentoRepository;
+    }
+
     public List<PrecioDescuento> obtenerDescuentosActivos(Date fecha) {
-        return repository.findActiveDiscountsAtDate(fecha);
+        return ((PrecioDescuentoRepository) repository).findActiveDiscountsAtDate(fecha);
     }
 
     public PrecioDescuento crearRelacion(PrecioDescuentoDTO dto) {
@@ -35,12 +46,12 @@ public class PrecioDescuentoService {
         relacion.setDescuento(descuento);
         return repository.save(relacion);
     }
+
     public void eliminarRelacion(Long precioId, Long descuentoId) {
-        repository.deleteByPrecioIdAndDescuentoId(precioId, descuentoId);
+        ((PrecioDescuentoRepository) repository).deleteByPrecioIdAndDescuentoId(precioId, descuentoId);
     }
+
     public void eliminarPorPrecio(Long id) {
-        repository.deleteByPrecioId(id);
+        ((PrecioDescuentoRepository) repository).deleteByPrecioId(id);
     }
-
-
 }

@@ -1,8 +1,8 @@
 package com.example.demo.repository;
 
-import com.example.demo.enums.Categoria;
 import com.example.demo.enums.Sexo;
 import com.example.demo.enums.TipoProducto;
+import com.example.demo.model.Categoria;
 import com.example.demo.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

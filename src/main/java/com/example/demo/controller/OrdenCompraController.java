@@ -1,20 +1,24 @@
 package com.example.demo.controller;
+import com.example.demo.controller.generics.GenericController;
 import com.example.demo.model.OrdenCompra;
 import com.example.demo.services.OrdenCompraService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordenes")
-@RequiredArgsConstructor
-public class OrdenCompraController {
+public class OrdenCompraController extends GenericController<OrdenCompra, Long> {
 
     private final OrdenCompraService ordenCompraService;
+
+    public OrdenCompraController(OrdenCompraService ordenCompraService) {
+        super(ordenCompraService);
+        this.ordenCompraService = ordenCompraService;
+    }
 
     @GetMapping("/usuario/{usuarioId}")
     public List<OrdenCompra> obtenerPorUsuario(@PathVariable Long usuarioId) {

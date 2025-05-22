@@ -23,8 +23,8 @@ public class UsuarioDireccionController {
 
     @PostMapping
     public ResponseEntity<UsuarioDireccion> vincular(@RequestBody UsuarioDireccionDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usuarioDireccionService.crearRelacion(dto));
+        UsuarioDireccion creado = usuarioDireccionService.crearRelacion(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @DeleteMapping

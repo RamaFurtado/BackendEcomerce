@@ -2,29 +2,22 @@ package com.example.demo.services;
 
 import com.example.demo.model.Descuento;
 import com.example.demo.repository.DescuentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.services.generics.GenericServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class DescuentoService {
+@RequiredArgsConstructor
+public class DescuentoService extends GenericServiceImpl<Descuento, Long> {
 
-    @Autowired
-    private DescuentoRepository descuentoRepository;
+    private final DescuentoRepository descuentoRepository;
 
     public List<Descuento> obtenerActivos() {
         Date hoy = new Date();
         return descuentoRepository.findByFechaInicioBeforeAndFechaFinalAfter(hoy, hoy);
     }
 
-
-    public Descuento crear(Descuento descuento) {
-        return descuentoRepository.save(descuento);
-    }
-
-    public void eliminar(Long id) {
-        descuentoRepository.deleteById(id);
-    }
 }

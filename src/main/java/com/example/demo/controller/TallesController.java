@@ -28,7 +28,6 @@ public class TallesController {
     }
 
 
-
     @PostMapping
     public ResponseEntity<Talles> crear(@RequestBody @Valid Talles talle) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tallesService.crear(talle));

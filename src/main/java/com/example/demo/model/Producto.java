@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.enums.Categoria;
 import com.example.demo.enums.Sexo;
 import com.example.demo.enums.TipoProducto;
 import jakarta.persistence.*;
@@ -23,6 +22,9 @@ public class Producto {
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
     private TipoProducto tipoProducto;
+
+    @ManyToOne
+    @JoinColumn(name="categoria_id")
     private Categoria categoria;
 
 

@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.generics.GenericController;
 import com.example.demo.model.Precio;
 import com.example.demo.services.PrecioService;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,10 +13,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/precios")
-@RequiredArgsConstructor
-public class PrecioController {
+public class PrecioController extends GenericController<Precio, Long> {
 
     private final PrecioService precioService;
+
+    public PrecioController(PrecioService precioService) {
+        super(precioService);
+        this.precioService = precioService;
+    }
+
+    // Endpoints específicos que no son CRUD básico:
 
     @GetMapping("/margen")
     public List<Precio> obtenerPorMargenMinimo(@RequestParam Double margen) {

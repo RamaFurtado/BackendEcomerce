@@ -2,15 +2,16 @@ package com.example.demo.services;
 
 import com.example.demo.model.Direccion;
 import com.example.demo.repository.DireccionRepository;
+import com.example.demo.services.generics.GenericServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DireccionService {
+public class DireccionService extends GenericServiceImpl<Direccion, Long> {
 
     private final DireccionRepository direccionRepository;
 

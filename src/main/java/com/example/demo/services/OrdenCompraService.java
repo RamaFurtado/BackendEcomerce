@@ -2,18 +2,20 @@ package com.example.demo.services;
 
 import com.example.demo.model.OrdenCompra;
 import com.example.demo.repository.OrdenCompraRepository;
+import com.example.demo.services.generics.GenericServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
-public class OrdenCompraService {
+public class OrdenCompraService extends GenericServiceImpl<OrdenCompra, Long> {
+
     private final OrdenCompraRepository ordenCompraRepository;
 
     public List<OrdenCompra> obtenerPorUsuario(Long usuarioId) {

@@ -8,23 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/usuarios")
-
+@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {
-        Optional<Usuario> usuarioOpt = usuarioService.obtenerPorId(id);
-        return usuarioOpt
+        return usuarioService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -37,8 +32,7 @@ public class UsuarioController {
 
     @GetMapping("/email")
     public ResponseEntity<Usuario> obtenerPorEmail(@RequestParam String email) {
-        Optional<Usuario> usuarioOpt = usuarioService.findByEmail(email);
-        return usuarioOpt
+        return usuarioService.findByEmail(email)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

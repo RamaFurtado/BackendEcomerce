@@ -5,8 +5,9 @@ import com.example.demo.model.Imagen;
 import com.example.demo.repository.DetalleImagenRepository;
 import com.example.demo.repository.DetalleRepository;
 import com.example.demo.repository.ImagenRepository;
+import com.example.demo.services.generics.GenericServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +15,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class DetalleImagenService {
+public class DetalleImagenService extends GenericServiceImpl<DetalleImagen, Long> {
 
     private final DetalleImagenRepository detalleImagenRepository;
     private final DetalleRepository detalleRepository;
     private final ImagenRepository imagenRepository;
 
     public DetalleImagen crear(DetalleImagen detalleImagen) {
-        // Valida la  existencia de detalle e imagen antes de guardar
         if (!detalleRepository.existsById(detalleImagen.getDetalle().getId())) {
             throw new RuntimeException("Detalle no encontrado");
         }
@@ -32,7 +32,6 @@ public class DetalleImagenService {
                 detalleImagen.getDetalle().getId(), detalleImagen.getImagen().getId())) {
             throw new RuntimeException("Ya existe una relación entre ese detalle y esa imagen");
         }
-
         return detalleImagenRepository.save(detalleImagen);
     }
 

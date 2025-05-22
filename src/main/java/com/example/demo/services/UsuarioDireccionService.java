@@ -8,7 +8,6 @@ import com.example.demo.repository.DireccionRepository;
 import com.example.demo.repository.UsuarioDireccionRepository;
 import com.example.demo.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UsuarioDireccionService {
+
     private final UsuarioDireccionRepository repository;
     private final UsuarioRepository usuarioRepository;
     private final DireccionRepository direccionRepository;
@@ -23,6 +23,7 @@ public class UsuarioDireccionService {
     public UsuarioDireccion crearRelacion(UsuarioDireccionDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
         Direccion direccion = direccionRepository.findById(dto.getDireccionId())
                 .orElseThrow(() -> new RuntimeException("Dirección no encontrada"));
 
@@ -47,6 +48,4 @@ public class UsuarioDireccionService {
     public List<UsuarioDireccion> obtenerPorDireccion(Long direccionId) {
         return repository.findByDireccionId(direccionId);
     }
-
-
 }

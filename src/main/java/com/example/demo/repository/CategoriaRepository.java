@@ -1,14 +1,14 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Talles;
+import com.example.demo.model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface TallesRepository extends JpaRepository<Talles, Long> {
-    Optional<Talles> findByTalle(String talle);
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+    Optional<Categoria> findByNombre(String nombre);
 
 
 }

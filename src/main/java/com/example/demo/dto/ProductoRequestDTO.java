@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.Categoria;
 import com.example.demo.enums.Sexo;
 import com.example.demo.enums.TipoProducto;
 import jakarta.validation.constraints.*;
@@ -23,7 +22,7 @@ public class ProductoRequestDTO {
     private TipoProducto tipoProducto;
 
     @NotNull(message = "La categoría no debe ser nula")
-    private Categoria categoria;
+    private String categoriaNombre;
 
     @NotNull(message = "El talle no debe ser nulo")
     private String talle;

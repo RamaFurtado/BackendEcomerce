@@ -1,37 +1,65 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.ProductoRequestDTO;
-import com.example.demo.enums.Sexo;
-import com.example.demo.enums.TipoProducto;
+
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
-import lombok.RequiredArgsConstructor;
+import com.example.demo.services.generics.GenericServiceImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Predicate;
+
 
 @Service
-@RequiredArgsConstructor
-public class ProductoService {
+
+public class ProductoService extends GenericServiceImpl<Producto, Long> {
+
     private final ProductoRepository productoRepository;
     private final TallesRepository tallesRepository;
     private final PrecioRepository precioRepository;
     private final DetalleRepository detalleRepository;
     private final ImagenRepository imagenRepository;
     private final DetalleImagenRepository detalleImagenRepository;
+    private final CategoriaRepository categoriaRepository;
+
+    @Autowired
+    public ProductoService(
+            ProductoRepository productoRepository,
+            TallesRepository tallesRepository,
+            PrecioRepository precioRepository,
+            DetalleRepository detalleRepository,
+            ImagenRepository imagenRepository,
+            DetalleImagenRepository detalleImagenRepository,
+            CategoriaRepository categoriaRepository) {
+        super(productoRepository);
+        this.productoRepository = productoRepository;
+        this.tallesRepository = tallesRepository;
+        this.precioRepository = precioRepository;
+        this.detalleRepository = detalleRepository;
+        this.imagenRepository = imagenRepository;
+        this.detalleImagenRepository = detalleImagenRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
 
     public Producto crearProducto(ProductoRequestDTO dto) {
-
-
-
         Producto producto = new Producto();
 
         producto.setNombre(dto.getNombre());
         producto.setSexo(dto.getSexo());
         producto.setTipoProducto(dto.getTipoProducto());
-        producto.setCategoria(dto.getCategoria());
+
+        // Buscar categoría por nombre o crearla si no existe
+        Categoria categoria = categoriaRepository.findByNombre(dto.getCategoriaNombre())
+                .orElseGet(() -> {
+                    Categoria nuevaCategoria = new Categoria();
+                    nuevaCategoria.setNombre(dto.getCategoriaNombre());
+                    return categoriaRepository.save(nuevaCategoria);
+                });
+        producto.setCategoria(categoria);
+
         producto.setDetalles(new ArrayList<>());
 
         producto = productoRepository.save(producto);
@@ -49,7 +77,6 @@ public class ProductoService {
         detalle.setProducto(producto);
         detalle.setPrecio(precio);
 
-
         // Buscar talle por nombre o crearlo
         Talles talle = tallesRepository.findByTalle(dto.getTalle())
                 .orElseGet(() -> {
@@ -57,6 +84,7 @@ public class ProductoService {
                     nuevoTalle.setTalle(dto.getTalle());
                     return tallesRepository.save(nuevoTalle);
                 });
+        detalle.setTalle(talle);
 
         detalle = detalleRepository.save(detalle);
 
@@ -75,25 +103,11 @@ public class ProductoService {
 
         return productoRepository.save(producto);
     }
-    public List<Producto> obtenerTodos() {
-        return productoRepository.findAll();
-    }
+
 
     public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
                                            Double precioMax, String sexo, String tipoProducto) {
         return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
-    }
-
-    public Producto obtenerPorId(Long id) {
-        return productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-    }
-
-
-    public void eliminar(Long id) {
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-        productoRepository.delete(producto);
     }
 
 }
