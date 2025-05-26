@@ -56,14 +56,19 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas publicas
+                        // Rutas públicas
+                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                        .requestMatchers("/api/productos/filtrar").permitAll()
+                        .requestMatchers("/api/imagenes/upload").permitAll()
 
-                        // Rutas administrativas para modificar productos, solo ADMIN
-                        .requestMatchers("/api/productos/**").hasRole("ADMIN")
+                        // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
+                        .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
+                        .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
 
-                        // Otras rutas
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/imagenes/upload").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -21,7 +21,8 @@ public class Usuario extends BaseEntity {
 
 
     @Enumerated(EnumType.STRING)
-    private Rol rol;
+    @Column(nullable = false)
+    private Rol rol = Rol.USUARIO; //se pone como usuario normal por defecto, lugo lo cambio en la base
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "usuario-ud")
