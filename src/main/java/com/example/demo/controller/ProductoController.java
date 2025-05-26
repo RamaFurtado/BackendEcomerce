@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
 import com.example.demo.model.Producto;
 import com.example.demo.services.ProductoService;
@@ -49,6 +50,11 @@ public class ProductoController {
     ) {
         return ResponseEntity.ok(productoService.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto));
     }
+    @GetMapping("/catalogo")
+    public List<ProductoCatalogoDTO> obtenerCatalogo() {
+        return productoService.obtenerCatalogo();
+    }
+
 
 
 }

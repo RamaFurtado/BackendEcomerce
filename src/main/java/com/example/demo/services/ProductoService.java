@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
 
 import com.example.demo.model.*;
@@ -108,6 +109,40 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
     public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
                                            Double precioMax, String sexo, String tipoProducto) {
         return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
+    }
+
+
+
+    public List<ProductoCatalogoDTO> obtenerCatalogo() {
+        List<Producto> productos = productoRepository.findAll();
+
+        return productos.stream().map(producto -> {
+
+            Detalle detalle = producto.getDetalles().stream().findFirst().orElse(null);
+            String marca = detalle != null ? detalle.getMarca() : "";
+            String color = detalle != null ? detalle.getColor() : "";
+            Double precio = detalle != null && detalle.getPrecio() != null
+                    ? detalle.getPrecio().getPrecioVenta() : 0.0;
+
+
+            String imagenUrl = "";
+            if (detalle != null && detalle.getImagenes() != null && !detalle.getImagenes().isEmpty()) {
+                DetalleImagen detalleImagen = detalle.getImagenes().get(0);
+                if (detalleImagen != null && detalleImagen.getImagen() != null) {
+                    imagenUrl = detalleImagen.getImagen().getUrl();
+                }
+            }
+
+            return new ProductoCatalogoDTO(
+                    producto.getId(),
+                    producto.getNombre(),
+                    marca,
+                    color,
+                    precio,
+                    producto.getCategoria() != null ? producto.getCategoria().getNombre() : "",
+                    imagenUrl
+            );
+        }).toList();
     }
 
 }
