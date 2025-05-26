@@ -1,11 +1,11 @@
 package com.example.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
-
+import java.util.List;
 
 
 public class UsuarioDetalles implements UserDetails {
@@ -18,8 +18,7 @@ public class UsuarioDetalles implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       //Aca si implemento roles tengo que cambiarlo
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().name()));
     }
 
     @Override

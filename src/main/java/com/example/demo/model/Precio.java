@@ -6,23 +6,19 @@ import lombok.*;
 import java.util.List;
 import java.util.Set;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Setter
-@Getter
-public class Precio {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Precio extends BaseEntity {
 
     private Double precioCompra;
     private Double precioVenta;
 
-
     @OneToMany(mappedBy = "precio")
     @JsonIgnore
     private List<Detalle> detalles;
+
     @OneToMany(mappedBy = "precio")
     private Set<PrecioDescuento> preciosDescuento;
 }

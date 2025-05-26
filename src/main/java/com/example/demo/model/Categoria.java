@@ -6,19 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class Categoria {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class Categoria extends BaseEntity {
 
     @Column(unique = true)
     private String nombre;
-
-
 }

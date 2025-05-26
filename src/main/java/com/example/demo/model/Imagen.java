@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Imagen {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Imagen extends BaseEntity {
 
     private String url;
 
@@ -20,4 +18,3 @@ public class Imagen {
     @JsonIgnore
     private List<DetalleImagen> detalles;
 }
-

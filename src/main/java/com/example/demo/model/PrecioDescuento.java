@@ -3,16 +3,11 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Getter
-@Setter
-public class PrecioDescuento {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class PrecioDescuento extends BaseEntity {
 
     private double precioFinal;
 
@@ -27,7 +22,4 @@ public class PrecioDescuento {
     @ManyToOne
     @JoinColumn(name = "precio_id")
     private Precio precio;
-    public void setPrecio(Precio precio) {
-
-    }
 }

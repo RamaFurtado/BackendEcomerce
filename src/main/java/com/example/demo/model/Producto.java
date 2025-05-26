@@ -6,29 +6,23 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Setter
-@Getter
-public class Producto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Producto extends BaseEntity {
 
     private String nombre;
 
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+
     private TipoProducto tipoProducto;
 
     @ManyToOne
     @JoinColumn(name="categoria_id")
     private Categoria categoria;
 
-
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<Detalle> detalles;
-
 }

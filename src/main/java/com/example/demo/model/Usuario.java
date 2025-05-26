@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.enums.Rol;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,18 +11,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Usuario extends BaseEntity {
 
     private String nombre;
     private String email;
     private String password;
     private String dni;
     private int direccionId;
+
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "usuario-ud")

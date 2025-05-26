@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Detalle {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Detalle extends BaseEntity {
 
     private Boolean estado;
     private String color;

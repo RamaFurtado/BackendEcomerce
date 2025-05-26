@@ -7,16 +7,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Entity
-public class OrdenCompra {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OrdenCompra extends BaseEntity {
 
     private LocalDate fecha;
     private int total;

@@ -7,14 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Direccion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Direccion extends BaseEntity {
 
     private String calle;
     private String ciudad;

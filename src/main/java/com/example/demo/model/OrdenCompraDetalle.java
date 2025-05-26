@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrdenCompraDetalle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OrdenCompraDetalle extends BaseEntity {
 
     private int cantidad;
 
