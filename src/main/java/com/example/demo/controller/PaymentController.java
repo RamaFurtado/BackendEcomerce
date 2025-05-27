@@ -25,8 +25,23 @@ public class PaymentController {
     private MercadoPagoService mercadoPagoService;
 
     @PostMapping("/create-preference")
-    public ResponseEntity<?> crearPreferencia(@RequestBody List<ProductoPagoDTO> productos) {
-        return mercadoPagoService.generarPreferencia(productos);
+    public ResponseEntity<?> createPreference(@RequestBody PaymentRequest request) {
+        try {
+            Preference preference = mercadoPagoService.createPreference(request);
+
+            // Respuesta para el frontend
+            Map<String, Object> response = new HashMap<>();
+            response.put("preferenceId", preference.getId());
+            response.put("initPoint", preference.getInitPoint());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al crear preferencia de pago");
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
     }
 
 
