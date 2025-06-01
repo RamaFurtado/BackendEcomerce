@@ -14,6 +14,11 @@ public class Imagen extends BaseEntity {
 
     private String url;
 
+    @ManyToOne
+    @JoinColumn(name = "producto_id")
+    @JsonIgnore
+    private Producto producto;
+
     @OneToMany(mappedBy = "imagen")
     @JsonIgnore
     private List<DetalleImagen> detalles;

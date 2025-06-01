@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.filter.JwtAuthenticationFilter;
+import org.apache.commons.collections4.Get;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -61,6 +62,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
+                        .requestMatchers("/api/imagenes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
 
 
                         // Rutas solo para ADMIN (crear, eliminar, actualizar productos)

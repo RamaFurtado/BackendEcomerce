@@ -31,4 +31,19 @@ public class DetalleImagenController extends GenericController<DetalleImagen, Lo
     public ResponseEntity<DetalleImagen> crear(@RequestBody @Valid DetalleImagen detalleImagen) {
         return ResponseEntity.status(HttpStatus.CREATED).body(detalleImagenService.crear(detalleImagen));
     }
+
+    @PostMapping("/asociar")
+    public ResponseEntity<String> asociarImagenProducto(
+            @RequestParam Long productId,
+            @RequestParam Long imagenId
+    ) {
+        return detalleImagenService.asociarImagenConProducto(productId,imagenId)
+                ? ResponseEntity.ok("Imagen asociada correctamente al producto")
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede asociar");
+    }
+
+    @GetMapping("/producto/{productoId}")
+    public ResponseEntity<List<Imagen>> obtenerImagenesPorProducto(@PathVariable Long productoId) {
+        return ResponseEntity.ok(detalleImagenService.obtenerImagenesPorProducto(productoId));
+    }
 }
