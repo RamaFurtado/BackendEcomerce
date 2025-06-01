@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CambiarRolDTO;
+import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
 import com.example.demo.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -18,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
+    @GetMapping
+    public ResponseEntity<List<Usuario>> obtenerTodos() {
+        return ResponseEntity.ok(usuarioService.obtenerTodos());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long id) {

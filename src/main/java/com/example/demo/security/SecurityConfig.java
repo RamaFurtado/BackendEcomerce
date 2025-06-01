@@ -62,8 +62,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
+<<<<<<< HEAD
                         .requestMatchers("/api/imagenes/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
+=======
+                        //.requestMatchers("/api/usuarios/**").permitAll()
+>>>>>>> 8b11f25f2feac0c50b09e316ea796a8b5e2b0cad
 
 
                         // Rutas solo para ADMIN (crear, eliminar, actualizar productos)

@@ -4,6 +4,7 @@ import com.example.demo.dto.CambiarRolDTO;
 import com.example.demo.dto.UsuarioRegistroDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.enums.Rol;
+import com.example.demo.model.Descuento;
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.UsuarioRepository;
 
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +24,10 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public List<Usuario> obtenerTodos() {
+        return usuarioRepository.findAll();
+    }
 
     public Optional<Usuario> obtenerPorId(Long id) {
         return usuarioRepository.findById(id);
