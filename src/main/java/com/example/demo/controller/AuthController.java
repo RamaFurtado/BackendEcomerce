@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.ArrayList;
 
 
@@ -48,7 +52,10 @@ public class AuthController {
             UserDetails userDetails = usuarioDetallesService.loadUserByUsername(loginRequest.getEmail());
             String jwt = jwtUtil.generarToken(userDetails.getUsername());
 
-            return ResponseEntity.ok(new AuthResponse(jwt));
+            //para enviar los datos al front junto con el token
+            Usuario usuario = usuarioService.buscarPorEmail(loginRequest.getEmail());
+
+            return ResponseEntity.ok(new AuthResponse(jwt, usuario.getNombre(), usuario.getEmail(), usuario.getDni()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
@@ -59,12 +66,30 @@ public class AuthController {
         try {
             UsuarioResponseDTO usuarioResponseDTO = usuarioService.registrarUsuario(registroDTO);
             String jwt = jwtUtil.generarToken(usuarioResponseDTO.getEmail());
-            return ResponseEntity.ok(new AuthResponse(jwt));
+
+            return ResponseEntity.ok(new AuthResponse(jwt,
+                    usuarioResponseDTO.getNombre(),
+                    usuarioResponseDTO.getEmail(),
+                    usuarioResponseDTO.getDni()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el registro");
         }
+    }
+
+    //para usar solo los datos del usuario
+    @GetMapping("/me")
+    public ResponseEntity<?> getUsuarioActual(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
+
+        String email = userDetails.getUsername();
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+
+        UsuarioResponseDTO dto = usuarioService.mapEntityToResponseDto(usuario);
+        return ResponseEntity.ok(dto);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.filter.JwtAuthenticationFilter;
+import org.apache.commons.collections4.Get;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.demo.services.UsuarioDetallesService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 
 @Configuration
@@ -55,12 +59,27 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:5173"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
+
+
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
+                        .requestMatchers("/api/imagenes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
+                                .requestMatchers(HttpMethod.GET,"api/usuarios/**").permitAll()
+
+
 
 
                         // Rutas solo para ADMIN (crear, eliminar, actualizar productos)

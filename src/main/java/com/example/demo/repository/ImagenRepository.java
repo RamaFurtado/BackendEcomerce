@@ -12,5 +12,4 @@ public interface ImagenRepository extends JpaRepository<Imagen, Long> {
 
     Optional<Imagen> findByUrl(String url);
     boolean existsByUrl(String url);
-
 }

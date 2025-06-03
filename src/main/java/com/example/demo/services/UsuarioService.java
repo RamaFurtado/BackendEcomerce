@@ -47,6 +47,12 @@ public class UsuarioService {
     }
 
 
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
+    }
+
+
 
     public UsuarioResponseDTO registrarUsuario(UsuarioRegistroDTO dto) {
         if (existsByEmail(dto.getEmail())) {

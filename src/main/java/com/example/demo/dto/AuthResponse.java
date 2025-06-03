@@ -12,4 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthResponse {
     private String jwt;
+    private String nombre;
+    private String email;
+    private String dni;
 }

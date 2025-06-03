@@ -6,6 +6,7 @@ import com.example.demo.model.Imagen;
 import com.example.demo.repository.ImagenRepository;
 import com.example.demo.services.generics.GenericServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

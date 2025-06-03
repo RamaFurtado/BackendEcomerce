@@ -11,6 +11,8 @@ public interface DetalleImagenRepository extends JpaRepository<DetalleImagen, Lo
 
     List<DetalleImagen> findByDetalleId(Long detalleId);
 
+    List<DetalleImagen> findByProductoId(Long productoId);
+
     List<DetalleImagen> findByImagenId(Long imagenId);
 
     void deleteByDetalleId(Long detalleId);

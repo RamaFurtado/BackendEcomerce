@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 public class DetalleImagen extends BaseEntity {
 
     @ManyToOne
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
+
+    @ManyToOne
     @JoinColumn(name = "detalle_id")
     @JsonIgnore
     private Detalle detalle;
