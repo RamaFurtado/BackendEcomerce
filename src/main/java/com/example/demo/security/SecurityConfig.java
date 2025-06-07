@@ -59,11 +59,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/productos/catalogo").permitAll()
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
                         .requestMatchers("/api/imagenes/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/imagenes/dto").permitAll()
 
 
                         // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
@@ -72,7 +72,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
                         .requestMatchers("/api/payments/**").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.POST, "/api/detalle-imagenes/asociar").hasRole("ADMIN")
 
 
                         .anyRequest().authenticated()

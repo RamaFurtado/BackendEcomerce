@@ -29,12 +29,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        //Rutas pulicas sin autorizacion
+
+        if(
+                path.startsWith("/api/auth")||
+                        path.startsWith("/api/productos/catalogo")||
+                        path.startsWith("/api/productos/filtrar")||
+                        path.startsWith("/api/imagenes")
+        ){
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 

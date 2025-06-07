@@ -10,6 +10,7 @@ import com.example.demo.services.generics.GenericServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -45,6 +46,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         this.categoriaRepository = categoriaRepository;
     }
 
+    @Transactional
     public Producto crearProducto(ProductoRequestDTO dto) {
         Producto producto = new Producto();
 
@@ -88,8 +90,15 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         detalle.setTalle(talle);
 
         detalle = detalleRepository.save(detalle);
+        detalleRepository.flush();
 
         producto.getDetalles().add(detalle);
+
+    // Eliminar relaciones anteriores (si existiesen)
+        detalleImagenRepository.deleteAllByDetalle(detalle);
+
+    // Asociar nuevas imágenes y guardar la mas reciente
+        Imagen imagenMasReciente = null;
 
         for (String url : dto.getImagenesUrls()) {
             Imagen imagen = new Imagen();
@@ -99,7 +108,17 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
             DetalleImagen detalleImagen = new DetalleImagen();
             detalleImagen.setDetalle(detalle);
             detalleImagen.setImagen(imagen);
-            detalleImagenRepository.save(detalleImagen);
+            detalleImagen.setProducto(producto);
+            detalleImagen = detalleImagenRepository.save(detalleImagen);
+
+            System.out.println("DEBUG: fechaCreacion = " + detalleImagen.getFechaCreacion());
+
+            imagenMasReciente = imagen; // tomamos la última como la más reciente
+        }
+
+        // Establecer la imagen más reciente como principal
+        if (imagenMasReciente != null) {
+            producto.setImagen(imagenMasReciente);
         }
 
         return productoRepository.save(producto);
@@ -127,7 +146,13 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
 
             String imagenUrl = "";
             if (detalle != null && detalle.getImagenes() != null && !detalle.getImagenes().isEmpty()) {
-                DetalleImagen detalleImagen = detalle.getImagenes().get(0);
+                DetalleImagen detalleImagen = detalle.getImagenes().stream()
+                .sorted(Comparator.comparing(
+                        DetalleImagen::getFechaCreacion,
+                        Comparator.nullsLast(Comparator.reverseOrder())
+                ))
+                        .findFirst()
+                        .orElse(null);
                 if (detalleImagen != null && detalleImagen.getImagen() != null) {
                     imagenUrl = detalleImagen.getImagen().getUrl();
                 }
@@ -145,4 +170,41 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         }).toList();
     }
 
+    //eliminar producto completo
+    @Transactional
+    public void eliminar(Long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+
+        //elimina relaciones detalleImagen y precio
+        for (Detalle detalle : producto.getDetalles()) {
+            detalleImagenRepository.deleteAllByDetalle(detalle);
+
+            // Eliminar precio si está presente
+            if (detalle.getPrecio() != null) {
+                precioRepository.delete(detalle.getPrecio());
+            }
+        }
+
+        //elimina los detalles directamente
+        detalleRepository.deleteAll(producto.getDetalles());
+
+        //limpia relaciones en memoria
+        producto.getDetalles().clear();
+
+        //desvincula imagen antes de borrar el producto
+        Imagen imagen = producto.getImagen();
+        producto.setImagen(null);
+
+        //guardas sin referencias que generen conflicto
+        productoRepository.save(producto);
+
+        //verifica si la imagen se puede borrar
+        if(imagen != null && !productoRepository.existsByImagen(imagen)) {
+            imagenRepository.delete(imagen);
+        }
+
+        //elimina el producto
+        productoRepository.delete(producto);
+    }
 }

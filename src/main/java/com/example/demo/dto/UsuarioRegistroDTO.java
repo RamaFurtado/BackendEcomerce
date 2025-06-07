@@ -20,6 +20,10 @@ public class UsuarioRegistroDTO {
     @NotBlank(message = "El DNI es obligatorio")
     private String dni;
 
+    @NotBlank(message = "El rol es obligatorio") // NUEVO
+    private String rol; // debe ser "ADMIN", "USUARIO", etc. según tu enum Rol
+
+
     // Si querés incluir direccion, agregás aquí un DTO para direccion (opcional)
     // private DireccionDTO direccion;
 

@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.enums.Sexo;
 import com.example.demo.enums.TipoProducto;
 import com.example.demo.model.Categoria;
+import com.example.demo.model.Imagen;
 import com.example.demo.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -43,5 +44,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>, JpaSp
                                     @Param("sexo") String sexo,
                                     @Param("tipoProducto") String tipoProducto);
     boolean existsByNombre(String nombre);
+
+    boolean existsByImagen(Imagen imagen);
 
 }

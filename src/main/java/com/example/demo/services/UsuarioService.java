@@ -67,7 +67,11 @@ public class UsuarioService {
 
         usuario.setPassword(dto.getPassword());
         usuario.setDni(dto.getDni());
-        usuario.setRol(Rol.USUARIO); // rol por defecto
+        try {
+            usuario.setRol(Rol.valueOf(dto.getRol().toUpperCase())); // convierte el string en enum
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Rol inválido: debe ser ADMIN o USUARIO");
+        }
         usuario.setActivo(true); // activo por defecto
         usuario.setDirecciones(new ArrayList<>());
         usuario.setOrdenes(new ArrayList<>());
