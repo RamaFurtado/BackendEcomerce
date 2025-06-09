@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 import com.example.demo.controller.generics.GenericController;
+import com.example.demo.dto.CrearOrdenRequest;
 import com.example.demo.model.OrdenCompra;
 import com.example.demo.services.OrdenCompraService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -44,5 +46,11 @@ public class OrdenCompraController extends GenericController<OrdenCompra, Long> 
     public Long contarOrdenes(@PathVariable Long usuarioId) {
         return ordenCompraService.cantidadComprasPorUsuario(usuarioId);
     }
+    @PostMapping("/crear")
+    public ResponseEntity<OrdenCompra> crearOrden(@RequestBody CrearOrdenRequest request) {
+        OrdenCompra nuevaOrden = ordenCompraService.crearOrden(request);
+        return ResponseEntity.ok(nuevaOrden);
+    }
+
 
 }

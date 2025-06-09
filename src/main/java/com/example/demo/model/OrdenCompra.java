@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -14,12 +15,15 @@ import java.util.List;
 public class OrdenCompra extends BaseEntity {
 
     private LocalDate fecha;
-    private int total;
+    private float total;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+    private String estado;
+
 
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)
-    private List<OrdenCompraDetalle> detalles;
+    private List<OrdenCompraDetalle> detalles = new ArrayList<>();
+
 }
