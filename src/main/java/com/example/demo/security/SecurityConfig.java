@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
+@EnableMethodSecurity
 
 @Configuration
 public class SecurityConfig {
@@ -61,7 +63,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173"));
+                    config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080")); //
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
@@ -77,6 +79,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/imagenes/upload").permitAll()
                         .requestMatchers("/api/imagenes/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
+                                .requestMatchers(HttpMethod.GET,"api/categorias").permitAll()
+                                .requestMatchers(HttpMethod.GET,"api/categorias/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"api/usuarios/**").permitAll()
 
 
@@ -86,6 +90,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/talles/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/imagenes/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/{productoId}/detalles").hasRole("ADMIN")
                 //        .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
                 //        .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
                         .requestMatchers("/api/payments/**").hasRole("ADMIN")

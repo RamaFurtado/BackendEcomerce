@@ -7,12 +7,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -23,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
         this.usuarioDetallesService = usuarioDetallesService;
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -39,21 +42,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        userEmail = jwtUtil.extraerEmail(jwt);
+        userEmail = jwtUtil.extraerEmail(jwt); // obtiene el email desde el claim "sub"
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = usuarioDetallesService.loadUserByUsername(userEmail);
+
             if (jwtUtil.validarToken(jwt, userDetails)) {
+                // Usar directamente los roles del usuario (ya vienen bien formateados como ROLE_ADMIN, etc.)
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities() // <- esto es lo correcto
+                        );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            System.out.println("Autenticado como: " + userDetails.getUsername() + " con roles: " + userDetails.getAuthorities());
         }
 
         filterChain.doFilter(request, response);
     }
+
+
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.DetalleRequestDTO;
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
 
@@ -45,72 +46,37 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Producto crearProducto(ProductoRequestDTO dto) {
-        Producto producto = new Producto();
-
-        producto.setNombre(dto.getNombre());
-        producto.setSexo(dto.getSexo());
-        producto.setTipoProducto(dto.getTipoProducto());
-
-        // Buscar categoría por nombre o crearla si no existe
-        Categoria categoria = categoriaRepository.findByNombre(dto.getCategoriaNombre())
-                .orElseGet(() -> {
-                    Categoria nuevaCategoria = new Categoria();
-                    nuevaCategoria.setNombre(dto.getCategoriaNombre());
-                    return categoriaRepository.save(nuevaCategoria);
-                });
-        producto.setCategoria(categoria);
-
-        producto.setDetalles(new ArrayList<>());
-
-        producto = productoRepository.save(producto);
-
-        Precio precio = new Precio();
-        precio.setPrecioCompra(dto.getPrecioCompra());
-        precio.setPrecioVenta(dto.getPrecioVenta());
-        precio = precioRepository.save(precio);
-
-        Detalle detalle = new Detalle();
-        detalle.setEstado(dto.getEstado());
-        detalle.setMarca(dto.getMarca());
-        detalle.setColor(dto.getColor());
-        detalle.setStock(dto.getStock());
-        detalle.setProducto(producto);
-        detalle.setPrecio(precio);
-
-        // Buscar talle por nombre o crearlo
-        Talles talle = tallesRepository.findByTalle(dto.getTalle())
-                .orElseGet(() -> {
-                    Talles nuevoTalle = new Talles();
-                    nuevoTalle.setTalle(dto.getTalle());
-                    return tallesRepository.save(nuevoTalle);
-                });
-        detalle.setTalle(talle);
-
-        detalle = detalleRepository.save(detalle);
-
-        producto.getDetalles().add(detalle);
-
-        for (String url : dto.getImagenesUrls()) {
-            Imagen imagen = new Imagen();
-            imagen.setUrl(url);
-            imagen = imagenRepository.save(imagen);
-
-            DetalleImagen detalleImagen = new DetalleImagen();
-            detalleImagen.setDetalle(detalle);
-            detalleImagen.setImagen(imagen);
-            detalleImagenRepository.save(detalleImagen);
-        }
-
-        return productoRepository.save(producto);
-    }
-
 
     public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
                                            Double precioMax, String sexo, String tipoProducto) {
         return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
     }
 
+    public Producto crearProducto(ProductoRequestDTO dto) {
+        System.out.println("LLEGÓ AL SERVICE ");
+        Producto producto = new Producto();
+        producto.setNombre(dto.getNombre());
+        producto.setSexo(dto.getSexo());
+        producto.setTipoProducto(dto.getTipoProducto());
+        producto.setActivo(false); // lo dejás inactivo al crear
+
+        // buscar o crear categoría
+        Optional<Categoria> categoriaOpt = categoriaRepository.findByNombre(dto.getCategoriaNombre());
+        Categoria categoria = categoriaOpt.orElseGet(() -> {
+            Categoria nueva = new Categoria();
+            nueva.setNombre(dto.getCategoriaNombre());
+            return categoriaRepository.save(nueva);
+        });
+
+
+        System.out.println("PASO EL CATEGORIA FIND");
+
+        producto.setCategoria(categoria);
+        producto.setDetalles(new ArrayList<>());
+
+        // guardar producto sin detalles aún
+        return productoRepository.save(producto);
+    }
 
 
     public List<ProductoCatalogoDTO> obtenerCatalogo() {
