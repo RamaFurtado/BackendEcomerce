@@ -24,27 +24,4 @@ public class ProductoRequestDTO {
     @NotNull(message = "La categoría no debe ser nula")
     private String categoriaNombre;
 
-    @NotNull(message = "El talle no debe ser nulo")
-    private String talle;
-
-    @NotBlank(message = "El color no debe estar vacío")
-    private String color;
-
-    @NotBlank(message = "La marca no debe estar vacía")
-    private String marca;
-
-    @NotNull(message = "El stock no debe ser nulo")
-    @Min(value = 0, message = "El stock no puede ser negativo")
-    private Integer stock;
-
-    private Boolean estado = true;
-
-    @NotNull(message = "El precio de compra no debe ser nulo")
-    private Double precioCompra;
-
-    @NotNull(message = "El precio de venta no debe ser nulo")
-    private Double precioVenta;
-
-    @NotEmpty(message = "Debe haber al menos una imagen")
-    private List<String> imagenesUrls;
 }

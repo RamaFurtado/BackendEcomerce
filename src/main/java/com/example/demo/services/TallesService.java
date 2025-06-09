@@ -18,5 +18,5 @@ public class TallesService extends GenericServiceImpl<Talles, Long> {
     public Optional<Talles> buscarPorTalle(String talle) {
         return tallesRepository.findByTalle(talle);
     }
-
 }
+

@@ -50,10 +50,11 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
             UserDetails userDetails = usuarioDetallesService.loadUserByUsername(loginRequest.getEmail());
-            String jwt = jwtUtil.generarToken(userDetails.getUsername());
 
             //para enviar los datos al front junto con el token
             Usuario usuario = usuarioService.buscarPorEmail(loginRequest.getEmail());
+            String jwt = jwtUtil.generarToken(usuario);
+
 
             return ResponseEntity.ok(new AuthResponse(jwt, usuario.getNombre(), usuario.getEmail(), usuario.getDni()));
         } catch (BadCredentialsException e) {
@@ -65,7 +66,8 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody @Valid UsuarioRegistroDTO registroDTO) {
         try {
             UsuarioResponseDTO usuarioResponseDTO = usuarioService.registrarUsuario(registroDTO);
-            String jwt = jwtUtil.generarToken(usuarioResponseDTO.getEmail());
+            Usuario usuario = usuarioService.buscarPorEmail(usuarioResponseDTO.getEmail());
+            String jwt = jwtUtil.generarToken(usuario);
 
             return ResponseEntity.ok(new AuthResponse(jwt,
                     usuarioResponseDTO.getNombre(),
@@ -91,6 +93,7 @@ public class AuthController {
         UsuarioResponseDTO dto = usuarioService.mapEntityToResponseDto(usuario);
         return ResponseEntity.ok(dto);
     }
+
 }
 
 

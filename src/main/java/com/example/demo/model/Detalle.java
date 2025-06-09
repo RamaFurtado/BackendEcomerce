@@ -32,5 +32,6 @@ public class Detalle extends BaseEntity {
     private Talles talle;
 
     @OneToMany(mappedBy = "detalle", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<DetalleImagen> imagenes;
 }
