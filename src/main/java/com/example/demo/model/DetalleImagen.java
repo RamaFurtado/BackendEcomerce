@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Data
@@ -19,9 +23,36 @@ public class DetalleImagen extends BaseEntity {
     @JoinColumn(name = "detalle_id")
     @JsonIgnore
     private Detalle detalle;
-
+    
     @ManyToOne
     @JoinColumn(name = "imagen_id")
     @JsonIgnore
     private Imagen imagen;
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Imagen getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Imagen imagen) {
+        this.imagen = imagen;
+    }
+
+    public Detalle getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(Detalle detalle) {
+        this.detalle = detalle;
+    }
 }
+
+
+

@@ -15,4 +15,5 @@ public class ProductoCatalogoDTO {
     private Double precio;
     private String categoria;
     private String imagenUrl;
+
 }

@@ -63,16 +63,23 @@ public class SecurityConfig {
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
                         .requestMatchers("/api/imagenes/**").permitAll()
+                        .requestMatchers("/api/payments/**").permitAll()
+                        .requestMatchers("/api/ordenes/crear").permitAll()
                         .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/categorias").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/categorias/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
 
 
                         // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
                         .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
-                        .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
-                        .requestMatchers("/api/payments/**").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.POST, "/api/talles/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/imagenes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/{productoId}/detalles").hasRole("ADMIN")
 
 
                         .anyRequest().authenticated()

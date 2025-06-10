@@ -34,10 +34,10 @@ public class DetalleImagenController extends GenericController<DetalleImagen, Lo
 
     @PostMapping("/asociar")
     public ResponseEntity<String> asociarImagenProducto(
-            @RequestParam Long productId,
-            @RequestParam Long imagenId
+            @RequestParam Long imagenId,
+            @RequestParam Long productId
     ) {
-        return detalleImagenService.asociarImagenConProducto(productId,imagenId)
+        return detalleImagenService.asociarImagenConProducto(imagenId, productId)
                 ? ResponseEntity.ok("Imagen asociada correctamente al producto")
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede asociar");
     }

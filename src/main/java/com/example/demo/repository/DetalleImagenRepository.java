@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Detalle;
 import com.example.demo.model.DetalleImagen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ public interface DetalleImagenRepository extends JpaRepository<DetalleImagen, Lo
     List<DetalleImagen> findByImagenId(Long imagenId);
 
     void deleteByDetalleId(Long detalleId);
+    void deleteAllByDetalle(Detalle detalle);
 
     void deleteByImagenId(Long imagenId);
 
