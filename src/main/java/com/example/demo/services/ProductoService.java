@@ -106,7 +106,8 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
                     color,
                     precio,
                     producto.getCategoria() != null ? producto.getCategoria().getNombre() : "",
-                    imagenUrl
+                    imagenUrl,
+                    producto.getTipoProducto()
             );
         }).toList();
     }

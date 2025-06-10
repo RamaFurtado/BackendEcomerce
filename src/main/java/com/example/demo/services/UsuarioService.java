@@ -73,8 +73,8 @@ public class UsuarioService {
 
         usuario.setPassword(dto.getPassword());
         usuario.setDni(dto.getDni());
-        usuario.setRol(Rol.USUARIO); // rol por defecto
-        usuario.setActivo(true); // activo por defecto
+        usuario.setRol(Rol.USUARIO);
+        usuario.setActivo(true);
         usuario.setDirecciones(new ArrayList<>());
         usuario.setOrdenes(new ArrayList<>());
         return usuario;

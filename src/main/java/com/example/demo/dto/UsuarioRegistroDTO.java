@@ -20,8 +20,6 @@ public class UsuarioRegistroDTO {
     @NotBlank(message = "El DNI es obligatorio")
     private String dni;
 
-    // Si querés incluir direccion, agregás aquí un DTO para direccion (opcional)
-    // private DireccionDTO direccion;
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.enums.TipoProducto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,5 @@ public class ProductoCatalogoDTO {
     private Double precio;
     private String categoria;
     private String imagenUrl;
+    private TipoProducto tipoProducto;
 }
