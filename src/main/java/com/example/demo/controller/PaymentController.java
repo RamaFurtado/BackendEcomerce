@@ -40,7 +40,7 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> recibirWebhook(@RequestBody Map<String, Object> payload) {
-        // Tu lógica webhook
+
         return ResponseEntity.ok("ok");
     }
 }

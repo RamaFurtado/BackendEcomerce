@@ -1,7 +1,7 @@
 package com.example.demo.enums;
 
 public enum Sexo {
-    HOMBRE,
-    MUJER,
+    MASCULINO,
+    FEMENINO,
     UNISEX
 }
