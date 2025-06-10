@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.dto.DetalleRequestDTO;
+
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
 import  com.example.demo.enums.Sexo;
@@ -68,7 +68,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         producto.setTipoProducto(dto.getTipoProducto());
         producto.setActivo(false); // lo dejás inactivo al crear
 
-        // buscar o crear categoría
+
         Optional<Categoria> categoriaOpt = categoriaRepository.findByNombre(dto.getCategoriaNombre());
         Categoria categoria = categoriaOpt.orElseGet(() -> {
             Categoria nueva = new Categoria();
@@ -82,7 +82,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         producto.setCategoria(categoria);
         producto.setDetalles(new ArrayList<>());
 
-        // guardar producto sin detalles aún
+
         return productoRepository.save(producto);
     }
 
@@ -92,12 +92,21 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
 
         return productos.stream().map(producto -> {
 
+            // DEBUGGING COMPLETO
+            System.out.println("=== DEBUG PRODUCTO ID: " + producto.getId() + " ===");
+            System.out.println("Nombre: " + producto.getNombre());
+            System.out.println("TipoProducto RAW: " + producto.getTipoProducto());
+            System.out.println("TipoProducto es null? " + (producto.getTipoProducto() == null));
+            if (producto.getTipoProducto() != null) {
+                System.out.println("TipoProducto.name(): " + producto.getTipoProducto().name());
+                System.out.println("TipoProducto.toString(): " + producto.getTipoProducto().toString());
+            }
+
             Detalle detalle = producto.getDetalles().stream().findFirst().orElse(null);
             String marca = detalle != null ? detalle.getMarca() : "";
             String color = detalle != null ? detalle.getColor() : "";
             Double precio = detalle != null && detalle.getPrecio() != null
                     ? detalle.getPrecio().getPrecioVenta() : 0.0;
-
 
             String imagenUrl = "";
             if (detalle != null && detalle.getImagenes() != null && !detalle.getImagenes().isEmpty()) {
@@ -113,15 +122,27 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
                 }
             }
 
-            return new ProductoCatalogoDTO(
+            String tipoProductoStr = producto.getTipoProducto() != null
+                    ? producto.getTipoProducto().name()
+                    : "VALOR_NULO";
+
+            System.out.println("TipoProducto final para DTO: '" + tipoProductoStr + "'");
+
+            ProductoCatalogoDTO dto = new ProductoCatalogoDTO(
                     producto.getId(),
                     producto.getNombre(),
                     marca,
                     color,
                     precio,
                     producto.getCategoria() != null ? producto.getCategoria().getNombre() : "",
-                    imagenUrl
+                    imagenUrl,
+                    tipoProductoStr
             );
+
+            System.out.println("DTO completo: " + dto.toString());
+            System.out.println("=== FIN DEBUG PRODUCTO ===");
+
+            return dto;
         }).toList();
     }
 
