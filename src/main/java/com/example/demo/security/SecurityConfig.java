@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.demo.services.UsuarioDetallesService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.List;
+
+@EnableMethodSecurity
 
 @Configuration
 public class SecurityConfig {
@@ -56,6 +61,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080")); //
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
+
+
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
@@ -72,7 +87,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
 
 
-                        // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
+                                // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
                         .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasRole("ADMIN")
@@ -80,6 +95,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/imagenes/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/{productoId}/detalles").hasRole("ADMIN")
+
+                           
+                //        .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                //        .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
+
 
 
                         .anyRequest().authenticated()

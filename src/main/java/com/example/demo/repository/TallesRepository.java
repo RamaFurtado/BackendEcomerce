@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface TallesRepository extends JpaRepository<Talles, Long> {
-    Optional<Talles> findByTalle(String talle);
-
-
+    Optional<Talles> findByTalle(String talle);  // <- ESTA FIRMA ES OBLIGATORIA
 }
