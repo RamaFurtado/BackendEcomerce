@@ -38,6 +38,7 @@ public class ImagenService extends GenericServiceImpl<Imagen, Long> {
     }
 
     public Imagen subirYGuardarImagen(MultipartFile archivo) throws IOException {
+
         Map uploadResult = cloudinary.uploader().upload(archivo.getBytes(), ObjectUtils.emptyMap());
         String url = uploadResult.get("secure_url").toString();
 

@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.dto.DetalleRequestDTO;
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
+import com.example.demo.enums.Sexo;
+import com.example.demo.enums.TipoProducto;
+import com.example.demo.model.Producto;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.CategoriaService;
@@ -66,14 +69,24 @@ public class ProductoController {
     }
     @GetMapping("/filtrar")
     public ResponseEntity<List<Producto>> filtrarProductos(
-            @RequestParam(required = false) String talle,
-            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) List<String> talle,
             @RequestParam(required = false) Double precioMin,
             @RequestParam(required = false) Double precioMax,
             @RequestParam(required = false) String sexo,
-            @RequestParam(required = false) String tipoProducto
+            @RequestParam(required = false) String tipoProducto,
+            @RequestParam (required = false) List<String> colores,
+            @RequestParam (required = false) String categoria
     ) {
-        return ResponseEntity.ok(productoService.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto));
+        Sexo sexoEnum = null;
+        TipoProducto tipoProductoEnum = null;
+
+        try{
+            if (sexo != null) sexoEnum = Sexo.valueOf(sexo.toUpperCase());
+            if (tipoProducto != null) tipoProductoEnum = TipoProducto.valueOf(tipoProducto.toUpperCase());
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(productoService.filtrarProductos(talle, precioMin, precioMax, sexoEnum, tipoProductoEnum, colores, categoria));
     }
     @GetMapping("/catalogo")
     public List<ProductoCatalogoDTO> obtenerCatalogo() {

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.model.Detalle;
 import com.example.demo.model.DetalleImagen;
 import com.example.demo.model.Imagen;
 import com.example.demo.model.Producto;
@@ -55,17 +56,57 @@ public class DetalleImagenService extends GenericServiceImpl<DetalleImagen, Long
     }
 
     public boolean asociarImagenConProducto(Long imagenId, Long productoId) {
-        Optional<Producto> productoOptional = productoRepository.findById(productoId);
-        Optional<Imagen> imagenOptional = imagenRepository.findById(imagenId);
+        try {
+            Optional<Producto> productoOptional = productoRepository.findById(productoId);
+            Optional<Imagen> imagenOptional = imagenRepository.findById(imagenId);
 
-        if (productoOptional.isEmpty() || imagenOptional.isEmpty()) return false;
+            if (productoOptional.isEmpty()) {
+                System.out.println("Producto no encontrado con ID: " + productoId);
+                return false;
+            }
 
-        DetalleImagen detalle = new DetalleImagen();
-        detalle.setProducto(productoOptional.get());
-        detalle.setImagen(imagenOptional.get());
-        detalleImagenRepository.save(detalle);
+            if (imagenOptional.isEmpty()) {
+                System.out.println("Imagen no encontrada con ID: " + imagenId);
+                return false;
+            }
 
-        return true;
+            Producto producto = productoOptional.get();
+            Imagen imagen = imagenOptional.get();
+
+            // Obtener primer detalle del producto
+            List<Detalle> detalles = detalleRepository.findByProductoId(productoId);
+            if (detalles.isEmpty()) {
+                System.out.println("No hay detalles asociados al producto");
+                return false;
+            }
+
+            Detalle detalle = detalles.get(0);
+            System.out.println("Asociando imagen ID " + imagenId + " al detalle ID " + detalle.getId() + " del producto ID " + productoId);
+
+            //Asociar la imagen nueva
+
+            DetalleImagen detalleImagen = new DetalleImagen();
+            detalleImagen.setProducto(producto);
+            detalleImagen.setDetalle(detalle);
+            detalleImagen.setImagen(imagen);
+            detalleImagenRepository.save(detalleImagen);
+
+            //Establecer la imagen mas nueva como principal
+            List<DetalleImagen> imagenes = detalleImagenRepository.findByProductoId(productoId);
+            imagenes.sort((a, b) -> b.getFechaCreacion().compareTo(a.getFechaCreacion())); // Orden descendente
+            if (!imagenes.isEmpty()) {
+                producto.setImagen(imagenes.get(0).getImagen());
+                productoRepository.save(producto);
+                System.out.println("Imagen principal del producto actualizada con la más reciente.");
+            }
+
+            return true;
+
+
+        } catch (Exception e) {
+            System.out.println("Error al asociar imagen con producto: " + e.getMessage());
+            return false;
+        }
     }
 
     public List<Imagen> obtenerImagenesPorProducto(Long productoId) {
