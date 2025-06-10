@@ -46,11 +46,7 @@ public class OrdenCompraController extends GenericController<OrdenCompra, Long> 
     public Long contarOrdenes(@PathVariable Long usuarioId) {
         return ordenCompraService.cantidadComprasPorUsuario(usuarioId);
     }
-    @PostMapping("/crear")
-    public ResponseEntity<OrdenCompra> crearOrden(@RequestBody CrearOrdenRequest request) {
-        OrdenCompra nuevaOrden = ordenCompraService.crearOrden(request);
-        return ResponseEntity.ok(nuevaOrden);
-    }
+
 
 
 }
