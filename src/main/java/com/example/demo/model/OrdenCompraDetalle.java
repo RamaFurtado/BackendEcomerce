@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ public class OrdenCompraDetalle extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "orden_id")
+    @JsonIgnore
     private OrdenCompra ordenCompra;
 
     @ManyToOne
