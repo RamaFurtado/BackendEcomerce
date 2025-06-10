@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dto.CambiarRolDTO;
 import com.example.demo.dto.UsuarioRegistroDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
+import com.example.demo.dto.UsuarioUpdateDTO;
 import com.example.demo.enums.Rol;
 import com.example.demo.model.Descuento;
 import com.example.demo.model.Usuario;
@@ -97,6 +98,25 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
+    public Usuario actualizarUsuario(String email, UsuarioUpdateDTO dto) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+
+        if (usuarioOptional.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado con el email: " + email);
+        }
+
+        Usuario usuarioExistente = usuarioOptional.get();
+
+        if (dto.getNombre() != null && !dto.getNombre().trim().isEmpty()) {
+            usuarioExistente.setNombre(dto.getNombre());
+        }
+        if (dto.getDni() != null && !dto.getDni().trim().isEmpty()) {
+            usuarioExistente.setDni(dto.getDni());
+        }
+
+
+        return usuarioRepository.save(usuarioExistente);
+    }
 
 }
 

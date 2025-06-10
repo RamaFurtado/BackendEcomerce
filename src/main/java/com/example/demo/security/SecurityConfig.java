@@ -81,6 +81,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/imagenes/**").permitAll()
                         .requestMatchers("/api/payments/**").permitAll()
                         .requestMatchers("/api/ordenes/crear").permitAll()
+                                .requestMatchers("/api/direcciones/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/usuario-direcciones").permitAll()
                         .requestMatchers(HttpMethod.GET,"api/imagenes/dto").permitAll()
                                 .requestMatchers(HttpMethod.GET,"api/categorias").permitAll()
                                 .requestMatchers(HttpMethod.GET,"api/categorias/**").permitAll()
