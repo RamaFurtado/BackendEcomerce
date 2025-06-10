@@ -18,4 +18,5 @@ public interface UsuarioDireccionRepository extends JpaRepository<UsuarioDirecci
     boolean existsByUsuarioIdAndDireccionId(Long usuarioId, Long direccionId);
 
     void deleteByUsuarioIdAndDireccionId(Long usuarioId, Long direccionId);
+    List<UsuarioDireccion> findByUsuario_Id(Long userId);
 }

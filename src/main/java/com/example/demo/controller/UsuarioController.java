@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CambiarRolDTO;
+import com.example.demo.dto.UsuarioUpdateDTO;
 import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
 import com.example.demo.services.UsuarioService;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +48,22 @@ public class UsuarioController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/perfil")
+    public ResponseEntity<?> actualizarPerfil(@RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String authenticatedUserEmail = authentication.getName();
+
+            Usuario usuarioActualizado = usuarioService.actualizarUsuario(authenticatedUserEmail, usuarioUpdateDTO);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el perfil: " + e.getMessage());
+        }
+    }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/cambiar-rol")
