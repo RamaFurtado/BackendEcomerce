@@ -3,6 +3,8 @@ package com.example.demo.services;
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
 
+import com.example.demo.enums.Sexo;
+import com.example.demo.enums.TipoProducto;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
@@ -125,9 +127,14 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
     }
 
 
-    public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
-                                           Double precioMax, String sexo, String tipoProducto) {
-        return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
+    public List<Producto> filtrarProductos(List<String> talle, Double precioMin,
+                                           Double precioMax, Sexo sexo, TipoProducto tipoProducto, List<String> colores, String categoriaNombre) {
+        Categoria categoria = null;
+        if (categoriaNombre != null && !categoriaNombre.isBlank()) {
+            categoria = categoriaRepository.findByNombreIgnoreCase(categoriaNombre).orElse(null);
+        }
+
+        return productoRepository.filtrarProductos(talle, precioMin, precioMax, sexo, tipoProducto,colores,categoria);
     }
 
 
