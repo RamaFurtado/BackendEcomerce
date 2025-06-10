@@ -1,9 +1,11 @@
 package com.example.demo.services;
 
-import com.example.demo.dto.CrearOrdenRequest;
-import com.example.demo.dto.ProductoPagoDTO;
+import com.example.demo.dto.CrearOrdenRequest; // Mantener si lo usas en otros lugares
+import com.example.demo.dto.ProductoPagoDTO; // Necesitamos esta clase para el nuevo método de creación de orden
 import com.example.demo.model.*;
+import com.example.demo.repository.DetalleRepository; // Necesitamos este repositorio para buscar Detalles
 import com.example.demo.repository.OrdenCompraRepository;
+import com.example.demo.repository.UsuarioRepository; // Necesitamos este repositorio para buscar Usuarios
 import com.example.demo.services.generics.GenericServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -21,6 +24,8 @@ import java.util.List;
 public class OrdenCompraService extends GenericServiceImpl<OrdenCompra, Long> {
 
     private final OrdenCompraRepository ordenCompraRepository;
+
+
 
     public List<OrdenCompra> obtenerPorUsuario(Long usuarioId) {
         return ordenCompraRepository.findByUsuarioId(usuarioId);
@@ -48,54 +53,20 @@ public class OrdenCompraService extends GenericServiceImpl<OrdenCompra, Long> {
 
 
     @Transactional
-    public OrdenCompra crearOrden(CrearOrdenRequest request) {
-        System.out.println("Entró a crearOrden");
-        Usuario usuario = new Usuario();
-        usuario.setId(request.getUsuarioId());
+    public OrdenCompra guardarOrdenCompra(OrdenCompra ordenCompra) {
+        System.out.println("-> [OrdenCompraService] Iniciando transacción para guardar Orden de Compra.");
 
-        OrdenCompra orden = new OrdenCompra();
-        orden.setUsuario(usuario);
-        orden.setFecha(LocalDate.now());
 
-        float total = 0f;
-        List<OrdenCompraDetalle> detalles = new ArrayList<>();
+        if (ordenCompra.getDetalles() != null) {
+            ordenCompra.getDetalles().forEach(detalleOrden -> {
 
-        for (ProductoPagoDTO prod : request.getProductos()) {
-            Detalle detalle = new Detalle();
-            detalle.setId(prod.getDetalleId());
+                detalleOrden.setOrdenCompra(ordenCompra);
 
-            OrdenCompraDetalle ordenDetalle = new OrdenCompraDetalle();
-            ordenDetalle.setCantidad(prod.getCantidad());
-            ordenDetalle.setDetalle(detalle);
-            ordenDetalle.setOrdenCompra(orden); // asignación muy importante
-
-            detalles.add(ordenDetalle);
+            });
         }
-
-        orden.setDetalles(detalles);
-
-
-        orden.setTotal(total);
-
-        return ordenCompraRepository.save(orden);
+        OrdenCompra savedOrden = ordenCompraRepository.save(ordenCompra);
+        System.out.println("-> [OrdenCompraService] Orden de Compra guardada con ID: " + savedOrden.getId());
+        return savedOrden;
     }
-
-
-
-
-    @Transactional
-    public void actualizarEstadoPago(Long ordenId, String nuevoEstado) {
-        OrdenCompra orden = ordenCompraRepository.findById(ordenId)
-                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
-
-        if (nuevoEstado.equalsIgnoreCase("approved")) {
-            orden.setEstado("APROBADA");
-        } else {
-            orden.setEstado("FALLIDA");
-        }
-
-        ordenCompraRepository.save(orden);
-    }
-
 
 }

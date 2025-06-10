@@ -12,4 +12,5 @@ import lombok.Setter;
 public class ProductoPagoDTO {
     private Long detalleId;
     private Integer cantidad;
+    private String nombre;
 }

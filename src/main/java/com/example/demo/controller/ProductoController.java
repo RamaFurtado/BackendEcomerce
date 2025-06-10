@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.DetalleRequestDTO;
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
+import com.example.demo.enums.Sexo;
+import com.example.demo.enums.TipoProducto;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.services.CategoriaService;
@@ -42,13 +44,6 @@ public class ProductoController {
 
 
 
-
-    //public ResponseEntity<Producto> crearProducto(@RequestBody ProductoRequestDTO dto) {
-    //    System.out.println("LLEGÓ AL CONTROLLER ");
-    //    return ResponseEntity.status(HttpStatus.CREATED).body(productoService.crearProducto(dto));
-    //}
-
-
     @GetMapping
     public List<Producto> listarProductos() {
         return productoService.obtenerTodos();
@@ -63,17 +58,6 @@ public class ProductoController {
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
-    }
-    @GetMapping("/filtrar")
-    public ResponseEntity<List<Producto>> filtrarProductos(
-            @RequestParam(required = false) String talle,
-            @RequestParam(required = false) String marca,
-            @RequestParam(required = false) Double precioMin,
-            @RequestParam(required = false) Double precioMax,
-            @RequestParam(required = false) String sexo,
-            @RequestParam(required = false) String tipoProducto
-    ) {
-        return ResponseEntity.ok(productoService.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto));
     }
     @GetMapping("/catalogo")
     public List<ProductoCatalogoDTO> obtenerCatalogo() {
@@ -139,5 +123,27 @@ public class ProductoController {
 
         producto.setActivo(true);
         return ResponseEntity.ok(productoRepository.save(producto));
+    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Producto>> filtrarProductos(
+            @RequestParam(required = false) List<String> talle,
+            @RequestParam(required = false) Double precioMin,
+            @RequestParam(required = false) Double precioMax,
+            @RequestParam(required = false) String sexo,
+            @RequestParam(required = false) String tipoProducto,
+            @RequestParam (required = false) List<String> colores,
+            @RequestParam (required = false) String categoria
+    ) {
+        Sexo sexoEnum = null;
+        TipoProducto tipoProductoEnum = null;
+
+        try{
+            if (sexo != null) sexoEnum = Sexo.valueOf(sexo.toUpperCase());
+            if (tipoProducto != null) tipoProductoEnum = TipoProducto.valueOf(tipoProducto.toUpperCase());
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(productoService.filtrarProductos(talle, precioMin, precioMax, sexoEnum, tipoProductoEnum, colores, categoria));
     }
 }

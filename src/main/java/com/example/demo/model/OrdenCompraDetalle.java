@@ -14,6 +14,8 @@ public class OrdenCompraDetalle extends BaseEntity {
 
     private int cantidad;
 
+    private Double subtotal;
+
     @ManyToOne
     @JoinColumn(name = "orden_id")
     @JsonIgnore

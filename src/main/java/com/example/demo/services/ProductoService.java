@@ -3,12 +3,15 @@ package com.example.demo.services;
 import com.example.demo.dto.DetalleRequestDTO;
 import com.example.demo.dto.ProductoCatalogoDTO;
 import com.example.demo.dto.ProductoRequestDTO;
+import  com.example.demo.enums.Sexo;
+import  com.example.demo.enums.TipoProducto;
 
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
 import com.example.demo.services.generics.GenericServiceImpl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +50,14 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
     }
 
 
-    public List<Producto> filtrarProductos(String talle, String marca, Double precioMin,
-                                           Double precioMax, String sexo, String tipoProducto) {
-        return productoRepository.filtrarProductos(talle, marca, precioMin, precioMax, sexo, tipoProducto);
+    public List<Producto> filtrarProductos(List<String> talle, Double precioMin,
+                                           Double precioMax, Sexo sexo, TipoProducto tipoProducto, List<String> colores, String categoriaNombre) {
+        Categoria categoria = null;
+        if (categoriaNombre != null && !categoriaNombre.isBlank()) {
+            categoria = categoriaRepository.findByNombreIgnoreCase(categoriaNombre).orElse(null);
+        }
+
+        return productoRepository.filtrarProductos(talle, precioMin, precioMax, sexo, tipoProducto,colores,categoria);
     }
 
     public Producto crearProducto(ProductoRequestDTO dto) {
@@ -93,7 +101,13 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
 
             String imagenUrl = "";
             if (detalle != null && detalle.getImagenes() != null && !detalle.getImagenes().isEmpty()) {
-                DetalleImagen detalleImagen = detalle.getImagenes().get(0);
+                DetalleImagen detalleImagen = detalle.getImagenes().stream()
+                        .sorted(Comparator.comparing(
+                                DetalleImagen::getFechaCreacion,
+                                Comparator.nullsLast(Comparator.reverseOrder())
+                        ))
+                        .findFirst()
+                        .orElse(null);
                 if (detalleImagen != null && detalleImagen.getImagen() != null) {
                     imagenUrl = detalleImagen.getImagen().getUrl();
                 }
@@ -109,6 +123,44 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
                     imagenUrl
             );
         }).toList();
+    }
+
+
+    @Transactional
+    public void eliminar(Long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+
+        //elimina relaciones detalleImagen y precio
+        for (Detalle detalle : producto.getDetalles()) {
+            detalleImagenRepository.deleteAllByDetalle(detalle);
+
+            // Eliminar precio si está presente
+            if (detalle.getPrecio() != null) {
+                precioRepository.delete(detalle.getPrecio());
+            }
+        }
+
+        //elimina los detalles directamente
+        detalleRepository.deleteAll(producto.getDetalles());
+
+        //limpia relaciones en memoria
+        producto.getDetalles().clear();
+
+        //desvincula imagen antes de borrar el producto
+        Imagen imagen = producto.getImagen();
+        producto.setImagen(null);
+
+        //guardas sin referencias que generen conflicto
+        productoRepository.save(producto);
+
+        //verifica si la imagen se puede borrar
+        if(imagen != null && !productoRepository.existsByImagen(imagen)) {
+            imagenRepository.delete(imagen);
+        }
+
+        //elimina el producto
+        productoRepository.delete(producto);
     }
 
 }

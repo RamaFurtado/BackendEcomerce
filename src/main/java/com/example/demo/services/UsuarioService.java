@@ -82,7 +82,6 @@ public class UsuarioService {
 
     public UsuarioResponseDTO mapEntityToResponseDto(Usuario usuario) {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
-        dto.setId(usuario.getId());
         dto.setNombre(usuario.getNombre());
         dto.setEmail(usuario.getEmail());
         dto.setDni(usuario.getDni());

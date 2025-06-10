@@ -75,6 +75,7 @@ public class SecurityConfig {
                         // Rutas públicas
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/productos/catalogo").permitAll()
                         .requestMatchers("/api/productos/filtrar").permitAll()
                         .requestMatchers("/api/imagenes/upload").permitAll()
                         .requestMatchers("/api/imagenes/**").permitAll()

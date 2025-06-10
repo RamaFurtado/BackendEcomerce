@@ -56,9 +56,17 @@ public class AuthController {
             String jwt = jwtUtil.generarToken(usuario);
 
 
-            return ResponseEntity.ok(new AuthResponse(jwt, usuario.getNombre(), usuario.getEmail(), usuario.getDni()));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+            // ¡Aquí está la corrección en el orden de los parámetros!
+            return ResponseEntity.ok(new AuthResponse(
+                    usuario.getId(),            // id (Long)
+                    jwt,                        // jwt (String) - ¡Ahora sí en su lugar correcto!
+                    usuario.getNombre(),        // nombre (String)
+                    usuario.getEmail(),         // email (String) - ¡Ahora en su lugar correcto!
+                    usuario.getRol().name(),    // rol (String)
+                    usuario.getDni()            // dni (String) - ¡Ahora en su lugar correcto!
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
         }
     }
 
@@ -69,14 +77,18 @@ public class AuthController {
             Usuario usuario = usuarioService.buscarPorEmail(usuarioResponseDTO.getEmail());
             String jwt = jwtUtil.generarToken(usuario);
 
-            return ResponseEntity.ok(new AuthResponse(jwt,
-                    usuarioResponseDTO.getNombre(),
-                    usuarioResponseDTO.getEmail(),
-                    usuarioResponseDTO.getDni()));
+            return ResponseEntity.ok(new AuthResponse(
+                    usuario.getId(),
+                    usuario.getNombre(),
+                    usuario.getEmail(),
+                    usuario.getDni(),
+                    usuario.getRol().name(),
+                    jwt
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el registro");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el registro: " + e.getMessage());
         }
     }
 
