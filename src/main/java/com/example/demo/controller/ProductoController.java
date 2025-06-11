@@ -146,4 +146,12 @@ public class ProductoController {
         }
         return ResponseEntity.ok(productoService.filtrarProductos(talle, precioMin, precioMax, sexoEnum, tipoProductoEnum, colores, categoria));
     }
+
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long id, @RequestBody ProductoRequestDTO dto) {
+        Producto actualizado = productoService.actualizarProducto(id, dto);
+        return ResponseEntity.ok(actualizado);
+    }
 }

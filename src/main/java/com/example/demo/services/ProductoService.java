@@ -167,5 +167,24 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         //elimina el producto
         productoRepository.delete(producto);
     }
+    public Producto actualizarProducto(Long id, ProductoRequestDTO dto) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        producto.setNombre(dto.getNombre());
+        producto.setSexo(dto.getSexo());
+        producto.setTipoProducto(dto.getTipoProducto());
+
+        Optional<Categoria> categoriaOpt = categoriaRepository.findByNombre(dto.getCategoriaNombre());
+        Categoria categoria = categoriaOpt.orElseGet(() -> {
+            Categoria nueva = new Categoria();
+            nueva.setNombre(dto.getCategoriaNombre());
+            return categoriaRepository.save(nueva);
+        });
+
+        producto.setCategoria(categoria);
+
+        return productoRepository.save(producto);
+    }
 
 }
