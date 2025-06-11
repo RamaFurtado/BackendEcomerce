@@ -91,9 +91,6 @@ public class SecurityConfig {
 
 
 
-
-
-
                                 // Rutas solo para ADMIN (crear, eliminar, actualizar productos)
                         .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
@@ -102,6 +99,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/imagenes/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/{productoId}/detalles").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/**/detalles").hasRole("ADMIN")
+
+                                .requestMatchers("/api/detalle-imagenes/**").hasRole("ADMIN")
                 //        .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
                 //        .requestMatchers("/api/usuarios/cambiar-rol").hasRole("ADMIN")
 

@@ -46,4 +46,15 @@ public class DetalleImagenController extends GenericController<DetalleImagen, Lo
     public ResponseEntity<List<Imagen>> obtenerImagenesPorProducto(@PathVariable Long productoId) {
         return ResponseEntity.ok(detalleImagenService.obtenerImagenesPorProducto(productoId));
     }
+
+    @PutMapping("/producto/{productoId}/principal/{imagenId}")
+    public ResponseEntity<String> asignarImagenPrincipal(
+            @PathVariable Long productoId,
+            @PathVariable Long imagenId
+    ) {
+        return detalleImagenService.asignarPrincipal(productoId, imagenId)
+                ? ResponseEntity.ok("Imagen principal asignada")
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo asignar");
+    }
+
 }

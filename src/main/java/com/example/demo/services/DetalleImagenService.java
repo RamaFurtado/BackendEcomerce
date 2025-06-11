@@ -116,4 +116,19 @@ public class DetalleImagenService extends GenericServiceImpl<DetalleImagen, Long
                 .map(DetalleImagen::getImagen)
                 .collect(Collectors.toList());
     }
+
+
+    public boolean asignarPrincipal(Long productoId, Long imagenId) {
+        Optional<Producto> productoOpt = productoRepository.findById(productoId);
+        Optional<Imagen> imagenOpt = imagenRepository.findById(imagenId);
+
+        if (productoOpt.isEmpty() || imagenOpt.isEmpty()) return false;
+
+        Producto producto = productoOpt.get();
+        producto.setImagen(imagenOpt.get());
+
+        productoRepository.save(producto);
+        return true;
+    }
+
 }

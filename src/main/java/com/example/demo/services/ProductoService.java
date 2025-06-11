@@ -108,19 +108,8 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
             Double precio = detalle != null && detalle.getPrecio() != null
                     ? detalle.getPrecio().getPrecioVenta() : 0.0;
 
-            String imagenUrl = "";
-            if (detalle != null && detalle.getImagenes() != null && !detalle.getImagenes().isEmpty()) {
-                DetalleImagen detalleImagen = detalle.getImagenes().stream()
-                        .sorted(Comparator.comparing(
-                                DetalleImagen::getFechaCreacion,
-                                Comparator.nullsLast(Comparator.reverseOrder())
-                        ))
-                        .findFirst()
-                        .orElse(null);
-                if (detalleImagen != null && detalleImagen.getImagen() != null) {
-                    imagenUrl = detalleImagen.getImagen().getUrl();
-                }
-            }
+            String imagenUrl = (producto.getImagen() != null) ? producto.getImagen().getUrl() : "";
+
 
             String tipoProductoStr = producto.getTipoProducto() != null
                     ? producto.getTipoProducto().name()
