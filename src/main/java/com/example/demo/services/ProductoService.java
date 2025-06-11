@@ -61,12 +61,12 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
     }
 
     public Producto crearProducto(ProductoRequestDTO dto) {
-        System.out.println("LLEGÓ AL SERVICE ");
+
         Producto producto = new Producto();
         producto.setNombre(dto.getNombre());
         producto.setSexo(dto.getSexo());
         producto.setTipoProducto(dto.getTipoProducto());
-        producto.setActivo(false); // lo dejás inactivo al crear
+        producto.setActivo(false);
 
 
         Optional<Categoria> categoriaOpt = categoriaRepository.findByNombre(dto.getCategoriaNombre());
@@ -77,7 +77,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
         });
 
 
-        System.out.println("PASO EL CATEGORIA FIND");
+
 
         producto.setCategoria(categoria);
         producto.setDetalles(new ArrayList<>());
@@ -92,11 +92,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
 
         return productos.stream().map(producto -> {
 
-            // DEBUGGING COMPLETO
-            System.out.println("=== DEBUG PRODUCTO ID: " + producto.getId() + " ===");
-            System.out.println("Nombre: " + producto.getNombre());
-            System.out.println("TipoProducto RAW: " + producto.getTipoProducto());
-            System.out.println("TipoProducto es null? " + (producto.getTipoProducto() == null));
+
             if (producto.getTipoProducto() != null) {
                 System.out.println("TipoProducto.name(): " + producto.getTipoProducto().name());
                 System.out.println("TipoProducto.toString(): " + producto.getTipoProducto().toString());
@@ -115,7 +111,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
                     ? producto.getTipoProducto().name()
                     : "VALOR_NULO";
 
-            System.out.println("TipoProducto final para DTO: '" + tipoProductoStr + "'");
+
 
             ProductoCatalogoDTO dto = new ProductoCatalogoDTO(
                     producto.getId(),
@@ -128,8 +124,7 @@ public class ProductoService extends GenericServiceImpl<Producto, Long> {
                     tipoProductoStr
             );
 
-            System.out.println("DTO completo: " + dto.toString());
-            System.out.println("=== FIN DEBUG PRODUCTO ===");
+
 
             return dto;
         }).toList();
